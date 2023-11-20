@@ -1,18 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>Line Chart with Highcharts</title>
+    <!-- Include the Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <style>
+        h1 {
             text-align: center;
         }
-        
-        #crecimiento {
+
+        #growth {
             background: #d3cece;
             width: 30%;
             height: 1.5rem;
             font-size: 1.2rem;
             padding: 10px;
-            box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.75);
-            -webkit-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.75);
-            -moz-box-shadow: 5px 5px 10px 1px rgba(0,0,0,0.75);
+            box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.75);
+            -webkit-box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.75);
+            -moz-box-shadow: 5px 5px 10px 1px rgba(0, 0, 0, 0.75);
             text-align: center;
-            /* margin-left: 50%; */
             margin-right: 1rem;
             float: right;
             border-radius: 5px;
@@ -21,208 +31,192 @@
 </head>
 
 <body>
-    <h1>Comparador de Crecimiento</h1>
+    <h1>Comparison of Growth</h1>
 
-    <!-- Contenedor del primer gráfico -->
-    <div id="grafico-linea-1" style="height: 300px;"></div>
+    <!-- Container for the first chart -->
+    <div id="line-chart-1" style="height: 300px;"></div>
 
-    <!-- Contenedor del segundo gráfico -->
-    <div id="grafico-linea-2" style="height: 300px;"></div>
+    <!-- Container for the second chart -->
+    <div id="line-chart-2" style="height: 300px;"></div>
 
-    <div id = "crecimiento"></div>
+    <div id="growth"></div>
 
-    <!-- Código JavaScript para crear los gráficos de línea -->
+    <!-- JavaScript code to create line charts -->
     <script>
-        // Datos para el primer gráfico
-        var datos1 = {
-        title: {
-            text: 'Crecimiento de Trabajadores en Intel',
-            align: 'left'
-        },
-        xAxis: {
-            categories: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']
-        },
-        yAxis: {
+        // Data for the first chart
+        var data1 = {
             title: {
-            text: ''
-            }
-        },
-        series: [{
-            data: [130, 67, 109, 255, 177],
-            dataLabels: {
-            enabled: true,
-            formatter: function () {
-                return this.y;
-            }
-            }
-        }],
-        plotOptions: {
-            series: {
-            point: {
-                events: {
-                mouseOver: function () {
-                    cambiacolor(chart1, chart2)
-                }
+                text: 'Employee Growth at Intel',
+                align: 'left'
+            },
+            xAxis: {
+                categories: ['January', 'February', 'March', 'April', 'May']
+            },
+            yAxis: {
+                title: {
+                    text: ''
                 }
             },
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        exporting: {
-            enabled: false
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-            // Mostrar el valor del punto al lado del punto
-            formatter: function () {
-            return '<b>' + this.x + '</b>: ' + this.y;
-            }
-        },
-        };
-
-        // Datos para el segundo gráfico
-        var datos2 = {
-        title: {
-            text: 'Crecimiento de Trabajadores en IBM',
-            align: 'left'
-        },
-        xAxis: {
-            categories: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo']
-        },
-        yAxis: {
-            title: {
-            text: ''
-            }
-        },
-        series: [{
-            data: [115, 465, 223, 155, 99],
-            dataLabels: {
-            enabled: true,
-            formatter: function () {
-                return this.y;
-            }
-            }
-        }],
-        plotOptions: {
-            series: {
-            point: {
-                events: {
-                mouseOver: function () {
-                    cambiacolor(chart2, chart1)
+            series: [{
+                data: [130, 67, 109, 255, 177],
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.y;
+                    }
                 }
-                },
+            }],
+            plotOptions: {
+                series: {
+                    point: {
+                        events: {
+                            mouseOver: function () {
+                                changeColor(chart1, chart2)
+                            }
+                        }
+                    },
+                }
             },
-            }
-        },
-        credits: {
-            enabled: false
-        },
-        exporting: {
-            enabled: false
-        },
-        legend: {
-            enabled: false
-        },
-        tooltip: {
-            // Mostrar el valor del punto al lado del punto
-            formatter: function () {
-            return '<b>' + this.x + '</b>: ' + this.y;
-            }
-        },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b>: ' + this.y;
+                }
+            },
         };
 
-    // Crea los gráficos
-    var chart1 = new Highcharts.Chart('grafico-linea-1', datos1);
-    var chart2 = new Highcharts.Chart('grafico-linea-2', datos2);
-    //funcion para obtener el index del punto al que se le hace hover
-    function cambiacolor(grafico_param_1, grafico_param_2){
-
-        //poner el color rojo al punto que se le hace hover
-        grafico_param_1.series[0].data[grafico_param_1.hoverPoint.index].update({
-            marker: {
-                fillColor: 'red'
-            }
-        });
-        //remover el colro de los demas puntos
-        for (let i = 0; i < grafico_param_1.series[0].data.length; i++) {
-            if(i!=grafico_param_1.hoverPoint.index){
-                grafico_param_1.series[0].data[i].update({
-                    marker: {
-                        fillColor: null
+        // Data for the second chart
+        var data2 = {
+            title: {
+                text: 'Employee Growth at IBM',
+                align: 'left'
+            },
+            xAxis: {
+                categories: ['January', 'February', 'March', 'April', 'May']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+            series: [{
+                data: [115, 465, 223, 155, 99],
+                dataLabels: {
+                    enabled: true,
+                    formatter: function () {
+                        return this.y;
                     }
-                });
+                }
+            }],
+            plotOptions: {
+                series: {
+                    point: {
+                        events: {
+                            mouseOver: function () {
+                                changeColor(chart2, chart1)
+                            }
+                        },
+                    },
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            legend: {
+                enabled: false
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.x + '</b>: ' + this.y;
+                }
+            },
+        };
+
+        // Create the charts
+        var chart1 = new Highcharts.Chart('line-chart-1', data1);
+        var chart2 = new Highcharts.Chart('line-chart-2', data2);
+
+        // Function to change color on hover
+        function changeColor(chart_param_1, chart_param_2) {
+            chart_param_1.series[0].data[chart_param_1.hoverPoint.index].update({
+                marker: {
+                    fillColor: 'red'
+                }
+            });
+            for (let i = 0; i < chart_param_1.series[0].data.length; i++) {
+                if (i != chart_param_1.hoverPoint.index) {
+                    chart_param_1.series[0].data[i].update({
+                        marker: {
+                            fillColor: null
+                        }
+                    });
+                }
             }
-            
-        }
-        //poner el color rojo al punto que se le hace hover
-        var index = grafico_param_1.hoverPoint.index;
-        grafico_param_2.series[0].data[index].update({
-            marker: {
-                fillColor: 'red'
+            var index = chart_param_1.hoverPoint.index;
+            chart_param_2.series[0].data[index].update({
+                marker: {
+                    fillColor: 'red'
+                }
+            });
+            for (let i = 0; i < chart_param_2.series[0].data.length; i++) {
+                if (i != index) {
+                    chart_param_2.series[0].data[i].update({
+                        marker: {
+                            fillColor: null
+                        }
+                    });
+                }
             }
-        });
-        //remover el colro de los demas puntos
-        for (let i = 0; i < grafico_param_2.series[0].data.length; i++) {
-            if(i!=index){
-                grafico_param_2.series[0].data[i].update({
-                    marker: {
-                        fillColor: null
-                    }
-                });
-            }
-            
+            chart_param_2.tooltip.refresh(chart_param_2.series[0].data[index]);
+            chart_param_1.tooltip.hide();
         }
 
-        //activar el tooltip del grafico_param_2
-        grafico_param_2.tooltip.refresh(grafico_param_2.series[0].data[index]);
-        //desactivar el tooltip del grafico_param_1
-        grafico_param_1.tooltip.hide();
-    }
-    //funcion que sume todos los valores de los puntos del grafico uno y dos 
-    function sumarValores(obtener_total_de_cual_grafico){
-        if (obtener_total_de_cual_grafico == "grafico_1")
-        {
-            var suma = 0;
-            for (let i = 0; i < chart1.series[0].data.length; i++) {
-                suma += chart1.series[0].data[i].y;
+        // Function to sum all values of points in chart one and two
+        function sumValues(get_total_of_which_chart) {
+            if (get_total_of_which_chart == "chart_1") {
+                var sum = 0;
+                for (let i = 0; i < chart1.series[0].data.length; i++) {
+                    sum += chart1.series[0].data[i].y;
+                }
+            } else {
+                var sum = 0;
+                for (let i = 0; i < chart2.series[0].data.length; i++) {
+                    sum += chart2.series[0].data[i].y;
+                }
+            }
+            return sum;
+        }
+
+        var total_chart_1 = sumValues("chart_1");
+        var total_chart_2 = sumValues("chart_2");
+
+        // Function to consider both values and calculate the percentage of which grew more
+        function winning_company() {
+            var percentage_chart_1 = (total_chart_1 * 100) / (total_chart_1 + total_chart_2);
+            var percentage_chart_2 = (total_chart_2 * 100) / (total_chart_1 + total_chart_2);
+            var growth = 0;
+            if (percentage_chart_1 > percentage_chart_2) {
+                growth = percentage_chart_1 - percentage_chart_2;
+                growth = growth.toFixed(2);
+                $("#growth").text("Intel grew in employees " + growth + "% more than IBM");
+            } else {
+                growth = percentage_chart_2 - percentage_chart_1;
+                growth = growth.toFixed(2);
+                $("#growth").text("IBM grew in employees " + growth + "% more than Intel");
             }
         }
-        else{
-            var suma = 0;
-            for (let i = 0; i < chart2.series[0].data.length; i++) {
-                suma += chart2.series[0].data[i].y;
-            }
-        }
-            
-        return suma;
-    }
-    var total_grafico_1 = sumarValores("grafico_1");
-    var total_grafico_2 = sumarValores("grafico_2");
-
-    //funcion que tome en cuenta los dos valores y saque un porcentaje de cual crecio mas y cuanto porcentaje crecio con respecto al otro
-        function empresa_ganadora (){
-            var porcentaje_grafico_1 = (total_grafico_1*100)/(total_grafico_1+total_grafico_2);
-            var porcentaje_grafico_2 = (total_grafico_2*100)/(total_grafico_1+total_grafico_2);
-            var crecimiento = 0;
-            if (porcentaje_grafico_1 > porcentaje_grafico_2){
-                crecimiento = porcentaje_grafico_1 - porcentaje_grafico_2;
-                //pasar crecimiento a dos decimales
-                crecimiento = crecimiento.toFixed(2);
-                $("#crecimiento").text("Intel creció en trabajadores "+crecimiento+"% mas que IBM")
-            }
-            else{
-                crecimiento = porcentaje_grafico_2 - porcentaje_grafico_1;
-                crecimiento = crecimiento.toFixed(2);
-                $("#crecimiento").text("IMB creció en trabajadores "+crecimiento+"% mas que Intel") 
-            }
-        }
-        empresa_ganadora ()
-
-</script>
-
+        winning_company()
+    </script>
 </body>
 </html>
